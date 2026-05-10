@@ -4,50 +4,41 @@
 #  Designed by: م/ السيد عون
 # ============================================================
 
-FACTORY_CONFIG = {
+FACTORY_CONFIG = {"factory_name":  "اسم مصنعك الحقيقي",
+"factory_city":  "مدينتك",
+"db_name":       "اسم_فريد",        # مثال: birma_factory
 
-    # -------- هوية المصنع --------
-    "factory_name":  "اسم المصنع",       # ← غيّره لاسم العميل
-    "factory_logo":  "logo.png",          # ← شعار المصنع (اختياري)
-    "factory_city":  "الرياض",           # ← المدينة
+"telegram_token": "توكن البوت بتاعك",
+"telegram_chat":  "ID المجموعة",
 
-    # -------- قاعدة البيانات --------
-    # اسم فريد لكل عميل → ينتج ملف  data/اسم_المصنع.db
-    "db_name":       "factory_name",      # ← غيّره لكل عميل  مثال: nour_water
+"admin_password": "كلمة سر قوية",
 
-    # -------- بوت التيليجرام --------
-    "telegram_token": "YOUR_BOT_TOKEN",
-    "telegram_chat":  "YOUR_CHAT_ID",
-
-    # -------- خطوط الإنتاج --------
-    "lines": {
-
-        "الخط الأول": {
-            "products": ["200 ml Carton", "600 ml Carton", "1.5 L Shrink"],
-            "bottles_per_unit": {
-                "200 ml Carton": 48,
-                "600 ml Carton": 30,
-                "1.5 L Shrink":  6,
-            },
-            "speed_per_shift": {
-                "200 ml Carton": 35000,
-                "600 ml Carton": 20000,
-                "1.5 L Shrink":  12000,
-            },
+"lines": {
+    "الخط الأول(smi)": {
+        "products": ["200 ml Carton", "600 ml Carton", "1.5 L Shrink"],
+        "bottles_per_unit": {
+            "200 ml Carton": 48,
+            "600 ml Carton": 30,
+            "1.5 L Shrink":  6,
         },
-
-        "الخط الثاني": {
-            "products": ["200 ml Carton", "330 ml Carton"],
-            "bottles_per_unit": {
-                "200 ml Carton": 48,
-                "330 ml Carton": 40,
-            },
-            "speed_per_shift": {
-                "200 ml Carton": 40000,
-                "330 ml Carton": 40000,
-            },
+        "speed_per_shift": {
+            "200 ml Carton": 35000,
+            "600 ml Carton": 20000,
+            "1.5 L Shrink":  12000,
         },
     },
+    "الخط الثاني(welbing)": {
+        "products": ["200 ml Carton", "330 ml Carton"],
+        "bottles_per_unit": {
+            "200 ml Carton": 48,
+            "330 ml Carton": 40,
+        },
+        "speed_per_shift": {
+            "200 ml Carton": 40000,
+            "330 ml Carton": 40000,
+        },
+    },
+},
 
     # -------- ماكينات الصيانة --------
     "machines": {
