@@ -16,6 +16,125 @@ from database import (
 # --- 1. إعدادات الصفحة ---
 st.set_page_config(page_title="Smart Factory System", page_icon="🏭", layout="wide")
 
+# --- شاشة الدخول ---
+USERS = {"admin": "100"}
+
+def show_login():
+    # CSS مخصص لشاشة الدخول
+    st.markdown("""
+    <style>
+    [data-testid="stAppViewContainer"] {
+        background: linear-gradient(135deg, #0a0a2e 0%, #0d1b4b 50%, #0a2a1a 100%);
+    }
+    [data-testid="stHeader"] { background: transparent; }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # شعار المصنع الذكي SVG
+    st.markdown("""
+    <div style='display:flex; justify-content:center; margin-top:40px; margin-bottom:10px;'>
+    <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+      <!-- خلفية دائرية -->
+      <circle cx="80" cy="80" r="78" fill="#0d1b4b" stroke="#00d4ff" stroke-width="2"/>
+
+      <!-- مبنى المصنع -->
+      <rect x="25" y="90" width="110" height="45" rx="3" fill="#1a3a6b"/>
+      <rect x="35" y="75" width="25" height="60" rx="2" fill="#1e4480"/>
+      <rect x="68" y="80" width="25" height="55" rx="2" fill="#1e4480"/>
+      <rect x="100" y="70" width="25" height="65" rx="2" fill="#1e4480"/>
+
+      <!-- مداخن -->
+      <rect x="40" y="50" width="8" height="28" rx="2" fill="#2a5a9f"/>
+      <rect x="73" y="55" width="8" height="28" rx="2" fill="#2a5a9f"/>
+      <rect x="106" y="45" width="8" height="28" rx="2" fill="#2a5a9f"/>
+
+      <!-- دخان/بخار -->
+      <ellipse cx="44" cy="47" rx="6" ry="4" fill="#00d4ff" opacity="0.3"/>
+      <ellipse cx="77" cy="52" rx="6" ry="4" fill="#00d4ff" opacity="0.3"/>
+      <ellipse cx="110" cy="42" rx="6" ry="4" fill="#00d4ff" opacity="0.3"/>
+
+      <!-- نوافذ -->
+      <rect x="38" y="82" width="8" height="8" rx="1" fill="#00d4ff" opacity="0.8"/>
+      <rect x="50" y="82" width="8" height="8" rx="1" fill="#00d4ff" opacity="0.5"/>
+      <rect x="72" y="87" width="8" height="8" rx="1" fill="#00d4ff" opacity="0.8"/>
+      <rect x="84" y="87" width="8" height="8" rx="1" fill="#00d4ff" opacity="0.5"/>
+      <rect x="104" y="78" width="8" height="8" rx="1" fill="#00d4ff" opacity="0.8"/>
+      <rect x="116" y="78" width="8" height="8" rx="1" fill="#00d4ff" opacity="0.5"/>
+
+      <!-- ترس ذكاء اصطناعي -->
+      <circle cx="80" cy="38" r="14" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+      <circle cx="80" cy="38" r="9" fill="#0d2a5e"/>
+      <text x="80" y="43" text-anchor="middle" font-size="12" fill="#00d4ff" font-weight="bold">AI</text>
+      <!-- أسنان الترس -->
+      <rect x="78" y="22" width="4" height="5" rx="1" fill="#00d4ff"/>
+      <rect x="78" y="49" width="4" height="5" rx="1" fill="#00d4ff"/>
+      <rect x="63" y="36" width="5" height="4" rx="1" fill="#00d4ff"/>
+      <rect x="92" y="36" width="5" height="4" rx="1" fill="#00d4ff"/>
+
+      <!-- خط قاعدة -->
+      <rect x="20" y="135" width="120" height="3" rx="1" fill="#00d4ff" opacity="0.6"/>
+
+      <!-- نبضة ذكية -->
+      <polyline points="22,128 35,128 42,115 50,140 58,120 66,128 138,128"
+                fill="none" stroke="#00ff88" stroke-width="1.5" opacity="0.8"/>
+    </svg>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # اسم النظام
+    st.markdown("""
+    <div style='text-align:center; margin-bottom:30px;'>
+        <h1 style='color:#00d4ff; font-size:28px; margin:0; letter-spacing:2px;'>
+            🏭 Smart Factory System
+        </h1>
+        <p style='color:#8899bb; font-size:13px; margin-top:6px;'>
+            نظام إدارة المصنع الذكي
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # فورم الدخول
+    col1, col2, col3 = st.columns([1, 1.2, 1])
+    with col2:
+        with st.form("login_form"):
+            st.markdown("<p style='color:#aabbcc; margin-bottom:4px;'>👤 اسم المستخدم</p>", unsafe_allow_html=True)
+            username = st.text_input("", placeholder="أدخل اسم المستخدم", label_visibility="collapsed")
+
+            st.markdown("<p style='color:#aabbcc; margin-bottom:4px; margin-top:12px;'>🔒 كلمة المرور</p>", unsafe_allow_html=True)
+            password = st.text_input("", placeholder="أدخل كلمة المرور", type="password", label_visibility="collapsed")
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            login_btn = st.form_submit_button("🚀 دخول", use_container_width=True)
+
+            if login_btn:
+                if username in USERS and USERS[username] == password:
+                    st.session_state["logged_in"] = True
+                    st.session_state["username"]  = username
+                    st.rerun()
+                else:
+                    st.error("❌ اسم المستخدم أو كلمة المرور غلط")
+
+    st.markdown("""
+    <div style='text-align:center; margin-top:40px;'>
+        <p style='color:#445566; font-size:11px;'>Designed by: م/ السيد عون</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# التحكم الرئيسي
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
+
+if not st.session_state["logged_in"]:
+    show_login()
+    st.stop()
+
+# زرار تسجيل الخروج
+with st.sidebar:
+    st.markdown(f"<p style='color:gray; font-size:12px;'>👤 {st.session_state.get('username','')}</p>", unsafe_allow_html=True)
+    if st.button("🚪 تسجيل الخروج"):
+        st.session_state["logged_in"] = False
+        st.rerun()
+
 # --- 2. نظام اللغات ---
 ln = st.sidebar.selectbox("🌐 Language / اللغة", ["ar", "en"], index=0)
 
@@ -57,7 +176,7 @@ LANG = {
         "speed_label":  "سرعة الخط (وحدة/وردية)",
     },
     "en": {
-        "designer":     "Eng. Elsayed Aoun",
+        "designer":     "Eng. Elsayed oun",
         "menu":         ["📈 Production Management", "🔧 Maintenance Center", "📊 Records & Reports"],
         "line_label":   "Working Line",
         "sup_label":    "Supervisor Name",
@@ -136,13 +255,13 @@ def get_scheduled_tasks(df_tasks):
 
 # --- الثوابت الفنية ---
 CONFIG = {
-    "الخط الأول": {
+    "(line 1) الخط الأول": {
         "الأصناف": ["200 ml Carton", "200 ml Shrink", "600 ml Carton", "1.5 L Shrink"],
         "العبوات": {"200 ml Carton": 48, "200 ml Shrink": 20, "600 ml Carton": 30, "1.5 L Shrink": 6},
     },
-    "الخط الثاني": {
+    "(line 2) الخط الثاني": {
         "الأصناف": ["200 ml Carton", "200 ml Shrink", "330 ml Carton", "331 ml Shrink"],
-        "العبوات": {"200 ml Carton": 48, "200 ml Shrink": 20, "330 ml Carton": 40, "331 ml Shrink": 20},
+        "العبوات": {"200 ml Carton": 48, "200 ml Shrink": 20, "330 ml Carton": 40, "330 ml Shrink": 20},
     }
 }
 
