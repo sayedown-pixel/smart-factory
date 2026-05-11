@@ -256,11 +256,11 @@ def get_scheduled_tasks(df_tasks):
 # --- الثوابت الفنية ---
 CONFIG = {
     "(line 1) الخط الأول": {
-        "الأصناف": ["200 ml Carton", "200 ml Shrink", "600 ml Carton", "1.5 L Shrink, "330 ml Carton", "330 ml Shrink"],
+        "الأصناف": ["200 ml Carton", "200 ml Shrink", "600 ml Carton", "1.5 L Shrink", "330 ml Carton", "330 ml Shrink"],
         "العبوات": {"200 ml Carton": 48, "200 ml Shrink": 20, "600 ml Carton": 30, "1.5 L Shrink": 6,"330 ml Carton": 40, "330 ml Shrink": 20},
     },
     "(line 2) الخط الثاني": {
-        "الأصناف": ["200 ml Carton", "200 ml Shrink", "600 ml Carton", "1.5 L Shrink, "330 ml Carton", "330 ml Shrink"],
+        "الأصناف": ["200 ml Carton", "200 ml Shrink", "600 ml Carton", "1.5 L Shrink", "330 ml Carton", "330 ml Shrink"],
         "العبوات": {"200 ml Carton": 48, "200 ml Shrink": 20, "600 ml Carton": 30, "1.5 L Shrink": 6,"330 ml Carton": 40, "330 ml Shrink": 20},
     }
 }
