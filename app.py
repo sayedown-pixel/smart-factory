@@ -173,11 +173,11 @@ LANG = {
         "del_maint_title":"حذف من سجل الصيانة",
         "select_row":   "اختار السجل للحذف",
         "no_file":      "⚠️ ملف الصيانة غير موجود:",
-        "speed_label":    "سرعة الخط (وحدة/ساعة)",
+        "speed_label":    "سرعة الخط (عبوة/ساعة)",
         "shift_start":    "بداية الوردية",
         "shift_end":      "نهاية الوردية",
         "shift_hours":    "⏱ مدة الوردية",
-        "eff_formula":    "الكفاءة = الإنتاج الفعلي ÷ (السرعة × ساعات التشغيل) × 100",
+        "eff_formula":    "الكفاءة = (وحدات × عبوات/وحدة) ÷ (السرعة عبوة/ساعة × ساعات التشغيل) × 100",
     },
     "en": {
         "designer":     "Eng. Elsayed oun",
@@ -213,11 +213,11 @@ LANG = {
         "del_maint_title":"Delete from Maintenance Log",
         "select_row":   "Select record to delete",
         "no_file":      "⚠️ Maintenance file not found:",
-        "speed_label":    "Line Speed (units/hour)",
+        "speed_label":    "Line Speed (bottles/hour)",
         "shift_start":    "Shift Start",
         "shift_end":      "Shift End",
         "shift_hours":    "⏱ Shift Duration",
-        "eff_formula":    "Efficiency = Output ÷ (Speed × Hours) × 100",
+        "eff_formula":    "Efficiency = (Units × bottles/unit) ÷ (Speed bottles/h × Hours) × 100",
     }
 }
 
@@ -319,12 +319,28 @@ if selected_menu == L["menu"][0]:
         shift_hrs = round((end_dt - start_dt).seconds / 3600, 2)
         st.info(f"{L['shift_hours']}: **{shift_hrs} ساعة** ({shift_start.strftime('%H:%M')} ← {shift_end.strftime('%H:%M')})")
 
+        # مؤشر الحساب المباشر
+        if target > 0 and line_speed > 0 and shift_hrs > 0:
+            b_per_u_prev = CONFIG[selected_line]["العبوات"][product]
+            total_b_prev = target * b_per_u_prev
+            max_out_prev = line_speed * shift_hrs
+            eff_prev     = round((total_b_prev / max_out_prev) * 100, 1)
+            color = "#d4edda" if eff_prev >= 80 else "#fff3cd" if eff_prev >= 60 else "#ffcccc"
+            st.markdown(f"""
+            <div style='background:{color};border-radius:8px;padding:10px 16px;margin:8px 0;'>
+            <b>📊 معاينة الكفاءة:</b><br>
+            {target:,} وحدة × {b_per_u_prev} عبوة = <b>{total_b_prev:,} عبوة فعلية</b><br>
+            {line_speed:,} عبوة/ساعة × {shift_hrs} ساعة = <b>{int(max_out_prev):,} عبوة قصوى</b><br>
+            <span style='font-size:18px;font-weight:bold;'>الكفاءة = {eff_prev}%</span>
+            </div>
+            """, unsafe_allow_html=True)
+
         if st.form_submit_button(L["save_btn"]):
-            b_per_u   = CONFIG[selected_line]["العبوات"][product]
-            total_b   = target * b_per_u
-            # ✅ معادلة الكفاءة الصحيحة
-            max_output = line_speed * shift_hrs
-            eff        = round((target / max_output) * 100, 1) if max_output > 0 else 0
+            b_per_u    = CONFIG[selected_line]["العبوات"][product]
+            total_b    = target * b_per_u          # الإنتاج الفعلي بالعبوة
+            max_output = line_speed * shift_hrs     # الطاقة القصوى بالعبوة
+            # ✅ الكفاءة = (إنتاج فعلي بالعبوة) ÷ (سرعة × ساعات) × 100
+            eff        = round((total_b / max_output) * 100, 1) if max_output > 0 else 0
             save_production({
                 "type":          "Production",
                 "line":          selected_line,
@@ -340,10 +356,10 @@ if selected_menu == L["menu"][0]:
             send_telegram(
                 f"🚀 *Production Update*\n"
                 f"Line: {selected_line}\nProduct: {product}\n"
-                f"Output: {target:,}\n"
+                f"Output: {target:,} وحدة ({total_b:,} عبوة)\n"
                 f"Shift: {shift_start.strftime('%H:%M')}→{shift_end.strftime('%H:%M')} ({shift_hrs}h)\n"
-                f"Speed: {line_speed:,} u/h\n"
-                f"Max Possible: {int(max_output):,}\n"
+                f"Speed: {line_speed:,} عبوة/ساعة\n"
+                f"Max: {int(max_output):,} عبوة\n"
                 f"Eff: {eff}%"
             )
             st.success(L["success_msg"])
